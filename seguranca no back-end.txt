@@ -1,0 +1,82 @@
+
+
+                                        *** SEGURANÇA NO BACK-END ***
+
+
+EXPLICAÇÃO:
+
+
+    Proteger os arquivos de sripts e regras de negócio;
+    Nesse caso, só ficariam no diretório público do Apache (htdocs) os arquivos que NÃO são sigilosos;
+    Os arquivos: 'valida_login.php' e 'arquivo.hd', sairão do diretório público para que pessoas mal intecionadas
+    não tentem baixar esses arquivos, ao invés de interpretá-los.
+
+
+    obs. não fiz, pq seria complicado de subir os arquivos p o repositório, então estou fazendo este passo a passo
+    para ficar registrado.
+
+        => Curso Udemy - Desenvolvimento Web Completo (Section 11: Linguagem de Programação PHP - 
+            363. App Help Desk - Segurança no back-end de aplicações web).
+
+
+
+PASSOS:
+
+
+1. Retirar esses dois arquivos do diretório público (htdocs), para que nenhuma requisição seja feita para tentar
+recuperar esses arquivos, já que eles não existem no diretório público;
+
+
+2. Criar no diretório XAMPP, um diretório 'app_help_desk', que está fora do diretório público e adicionar 
+esses dois arquivos
+
+    HIERARQUIA DOS DIRETÓRIOS:
+
+    C:/xamppp
+        - app_help_desk ( será o diretório de arquivos e scripts sigilosos)
+        - htdocs/app_help_desk (diretório público)
+
+
+* Após esse passo, a aplicação quebra, e para corrigir isso:
+
+
+3. Utilizar os comandos de inclusão: include, include_once, require, require_once;
+
+
+4. Criar dentro do diretório htdocs/app_help_desk um novo script (valida_login.php) que terá os comandos de inclusão para processar os scripts sigilosos que estão fora do diretório público:
+
+dentro do novo arquivo 'valida_login.php':
+
+<?php
+
+    require "../../app_help_desk/valida_login.php";
+
+    # ../ # => subir do diretório 'app_help_desk' (onde o novo script está) para o diretório 'htdocs'
+    # ../ # => subir do diretório 'htdocs' para o diretório 'xampp'
+    # depois entra dentro da nova pasta 'app_help_desk' (não pública)
+    # acessa o arquivo (antigo) que agora está dentro da nova pasta 'valida_login.php'
+?>
+
+
+5. Mudar o códido de 'registra_chamado' e 'consultar_chamado' para acessar 'arquivo.hd':
+
+
+<?php
+    // registra_chamado
+    $arquivo = fopen('../../app_help_desk/arquivos.hd', 'a');
+
+
+    // consultar_chamado
+    $arquivo = fopen('../../app_help_desk/arquivos.hd', 'r');
+
+?>
+
+
+
+
+
+
+
+
+
+
